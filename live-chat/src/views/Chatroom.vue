@@ -10,8 +10,9 @@
 import NewChatRoom from "../components/NewChatForm.vue"
 import Navbar from "../components/Navbar.vue"
 import ChatWindow from "../components/ChatWindow.vue"
+
 export default {
-    components:{Navbar, NewChatRoom, ChatWindow}
+    components:{Navbar, NewChatRoom, ChatWindow},
 }
 </script>
 
