@@ -12,14 +12,15 @@
 import { useRouter } from "vue-router";
 import useLogout from "../composables/useLogout.js";
 import getUser from "../composables/getUser.js";
+import { useStore } from 'vuex';
 export default {
   setup(props) {
+    const store = useStore()
     const { user } = getUser();
-    const { error, logout } = useLogout();
     const router = useRouter();
     const handleLogout = async () => {
-      await logout();
-      if (!error.value) {
+      await store.dispatch('logout');
+      if (!store.state.error) {
         console.log("logged out!!!");
         router.push({ name: "Welcome" });
       }

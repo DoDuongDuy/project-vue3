@@ -23,7 +23,6 @@ import SignUp from "../components/SignUp.vue";
 import LogIn from "../components/LogIn.vue";
 import { ref } from "@vue/reactivity";
 import { useRouter } from "vue-router";
-
 export default {
   components: { SignUp, LogIn },
   setup() {
