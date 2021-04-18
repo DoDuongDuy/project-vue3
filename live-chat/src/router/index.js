@@ -6,7 +6,7 @@ import { projectAuth } from "../firebase/config.js";
 // auth guard
 const requireAuth = (to, from, next) => {
   let user = projectAuth.currentUser;
-  console.log("guard " + user);
+  // console.log("guard " + user);
   if (!user) {
     next({ name: "Welcome" });
   } else {

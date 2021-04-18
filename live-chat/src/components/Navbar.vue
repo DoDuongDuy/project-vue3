@@ -5,24 +5,27 @@
       <p class="email">Currently logged in as...{{ user.email }}</p>
     </div>
     <button @click="handleLogout">Logout</button>
+    <!-- <p>{{ user1.email }} </p> -->
   </nav>
 </template>
 
 <script>
+import { computed } from '@vue/runtime-core';
 import { useRouter } from "vue-router";
-import useLogout from "../composables/useLogout.js";
-import getUser from "../composables/getUser.js";
+// import useLogout from "../composables/useLogout.js";
+// import getUser from "../composables/getUser.js";
 import { useStore } from 'vuex';
 export default {
   setup(props) {
-    const store = useStore()
-    const { user } = getUser();
+    const store = useStore();
+    let user = computed(()=>store.getters.getUser);
+    // const { user } = getUser();
     const router = useRouter();
     const handleLogout = async () => {
       await store.dispatch('logout');
       if (!store.state.error) {
         console.log("logged out!!!");
-        router.push({ name: "Welcome" });
+        router.push({ name: "Welcome" }); 
       }
     };
     return { user, handleLogout };

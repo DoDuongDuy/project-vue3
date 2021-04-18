@@ -8,18 +8,14 @@
 </template>
 
 <script>
-import { ref } from '@vue/reactivity';
 import { useStore } from 'vuex';
+import { computed } from '@vue/runtime-core';
 export default {
   setup(props, context) {
     const store = useStore();
-    const err = store.state.error;
+    const err = computed(()=> store.state.error);
     const handleSubmit = async () => {
-      let form = {
-        email: store.state.email,
-        password : store.state.password
-      } 
-      await store.dispatch("login",form);
+      await store.dispatch("login");
       if(!store.state.error) {
         console.log("user logged in");
         context.emit("login")

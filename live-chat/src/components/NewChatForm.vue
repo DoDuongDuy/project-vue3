@@ -6,35 +6,32 @@
       @keypress.enter.prevent="handleSubmit"
     >
     </textarea>
-    <div class="error">{{error}} </div>
+    <div class="error">{{$store.state.error}} </div>
   </form>
 </template>
 
 <script>
-import { ref } from "@vue/reactivity";
-import getUser from "../composables/getUser.js";
+import { reactive, ref } from "@vue/reactivity";
 import { timestamp } from "../firebase/config.js";
-import useCollection from "../composables/useCollection.js";
+import { useStore } from 'vuex';
 export default {
   setup(props) {
     const message = ref("");
-    const { user } = getUser();
-    const { addDoc, error } = useCollection("messages");
+    const store = useStore();
     const handleSubmit = async () => {
-      const chat = {
-        name: user.value.displayName,
-        email: user.value.email,
+      const chat = reactive({
+        name: store.getters.getUser.displayName,
+        email: store.getters.getUser.email,
         message: message.value,
         createAt: timestamp,
-      };
-      console.log(chat);
-      await addDoc(chat);
-      if (!error.value) {
+      }); 
+      await store.dispatch('addDoc', chat);
+      if (!store.state.error) {
         message.value = "";
       }
     };
 
-    return { message, handleSubmit , error};
+    return { message, handleSubmit };
   },
 };
 </script>
