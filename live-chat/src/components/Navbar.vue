@@ -12,14 +12,11 @@
 <script>
 import { computed } from '@vue/runtime-core';
 import { useRouter } from "vue-router";
-// import useLogout from "../composables/useLogout.js";
-// import getUser from "../composables/getUser.js";
 import { useStore } from 'vuex';
 export default {
   setup(props) {
     const store = useStore();
     let user = computed(()=>store.getters.getUser);
-    // const { user } = getUser();
     const router = useRouter();
     const handleLogout = async () => {
       await store.dispatch('logout');

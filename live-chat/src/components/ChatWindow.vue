@@ -1,10 +1,11 @@
 <template>
   <div class="chat-window">
-    <div v-if="error">
-      {{ error }}
+    <div v-if="$store.state.error">
+      {{ $store.state.error }}
     </div>
-    <div class="messages" v-if="documents">
-      <div class="single" v-for="doc in documents" :key="doc.id">
+    <!-- <p>{{}} </p>  -->
+    <div class="messages" v-if="$store.state.documents">
+      <div class="single" v-for="doc in $store.state.documents" :key="doc.id">
         <span class="create-at">
           {{ doc.createAt.toDate().toLocaleTimeString('en-US') }}  - {{ doc.createAt.toDate().toString() }}
         </span>
@@ -18,22 +19,11 @@
 </template>
 
 <script>
-import getCollection from "../composables/getCollection.js";
-import {computed} from "vue"
-import { format, formatDistanceToNow, formatRelative, subDays } from "date-fns";
+import { useStore } from 'vuex';
 export default {
-  setup(props) {
-    const { error, documents } = getCollection("messages");
-
-    const formatDateDocuments = computed(() => {
-      if (documents.value) {
-        return documents.value.map((doc) => {
-          let time = formatDistanceToNow(doc.createAt.toDate());
-          return { ...doc, createAt: time };
-        });
-      }
-    });
-    return { error, documents, formatDateDocuments };
+  setup() {
+    const store = useStore();
+    store.commit("getCollection");
   },
 };
 </script>

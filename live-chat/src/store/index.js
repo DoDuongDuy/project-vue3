@@ -1,7 +1,6 @@
 import { ref } from "@vue/reactivity";
 import { createStore } from "vuex";
-import addDoc from "../composables/useCollection";
-import { projectAuth ,projectFirestore  } from "../firebase/config";
+import { projectAuth, projectFirestore } from "../firebase/config";
 
 export default createStore({
   state: {
@@ -10,8 +9,8 @@ export default createStore({
     displayName: "",
     error: ref(null),
     user: [],
-    collection:"messages"
-
+    collection: "messages",
+    documents: ref(null),
   },
   getters: {
     getUser(state) {
@@ -21,7 +20,31 @@ export default createStore({
       return state.user;
     },
   },
-  mutations: {},
+  mutations: {
+    //get Collection
+    getCollection(state) {
+      state.documents = null;
+      let collectionref = projectFirestore
+        .collection(state.collection)
+        .orderBy("createAt");
+      collectionref.onSnapshot(
+        (snap) => {
+          let results = [];
+          snap.docs.forEach((doc) => {
+            doc.data().createAt && results.push({ ...doc.data(), id: doc.id });
+          });
+          state.documents = results;
+          state.error = null;
+        },
+        (err) => {
+          console.log(err.message);
+          state.documents = null;
+          state.error = "could not fetch the data";
+        }
+      );
+      return state.documents;
+    },
+  },
   actions: {
     // login
     async login({ state }) {
@@ -67,15 +90,14 @@ export default createStore({
         state.error = err.message;
       }
     },
-
     //useCollection
-    async addDoc({state},doc) {
+    async addDoc({ state }, doc) {
       state.error = null;
       try {
         await projectFirestore.collection(state.collection).add(doc);
       } catch (err) {
         console.log(err.message);
-        state.error = "could not send the message!!"
+        state.error = "could not send the message!!";
       }
     },
   },
