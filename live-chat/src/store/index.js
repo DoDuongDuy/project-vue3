@@ -4,6 +4,7 @@ import { projectAuth, projectFirestore } from "../firebase/config";
 
 export default createStore({
   state: {
+  duy:1,
     email: "",
     password: "",
     displayName: "",
@@ -21,6 +22,7 @@ export default createStore({
     },
   },
   mutations: {
+  
     //get Collection
     getCollection(state) {
       state.documents = null;
