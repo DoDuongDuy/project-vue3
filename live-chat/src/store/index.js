@@ -4,7 +4,6 @@ import { projectAuth, projectFirestore } from "../firebase/config";
 
 export default createStore({
   state: {
-  duy:1,
     email: "",
     password: "",
     displayName: "",
