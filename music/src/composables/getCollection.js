@@ -16,7 +16,6 @@ const getCollection = (collection) => {
       // must wait for the server to create the timestamp & send it back
       doc.data().createdAt && results.push({...doc.data(), id: doc.id})
     });
-    
     // update values
     documents.value = results
     error.value = null
