@@ -3,7 +3,7 @@
     <nav>
       <h1>
         <div class="logo">
-          <img src="../assets/logo.jpg" alt="logo" />
+          <router-link :to="{ name: 'Home' }"><img src="../assets/logo.jpg" alt="logo" /></router-link>
           <router-link :to="{ name: 'Home' }">Music</router-link>
         </div>
       </h1>

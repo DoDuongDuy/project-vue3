@@ -33,9 +33,10 @@ export default {
     const error = computed(()=> store.state.error);
     const handleSubmit = async () => {
       await store.dispatch("login");
+      console.log(context);
       if(!store.state.error) {
         console.log("user logged in");
-        // context.emit("login")
+        context.emit("login")
       }
     };
 
