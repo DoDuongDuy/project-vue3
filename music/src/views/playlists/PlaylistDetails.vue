@@ -1,14 +1,14 @@
 <template>
-  <div class="error" v-if="error">{{ error }}</div>
-  <div v-if="playlist" class="playlist-details">
+  <div class="error" v-if="store.state.error">{{ store.state.error }}</div>
+  <div v-if="store.state.document" class="playlist-details">
     <!-- playlist information -->
     <div class="playlist-info">
       <div class="cover">
-        <img :src="playlist.coverUrl" />
+        <img :src="store.state.document.coverUrl" />
       </div>
-      <h2>{{ playlist.title }}</h2>
-      <p class="username">Created by {{ playlist.userName }}</p>
-      <p class="description">{{ playlist.description }}</p>
+      <h2>{{ store.state.document.title }}</h2>
+      <p class="username">Created by {{ store.state.document.userName }}</p>
+      <p class="description">{{ store.state.document.description }}</p>
     </div>
 
     <!-- song list -->
@@ -19,12 +19,15 @@
 </template>
 
 <script>
-import getDocument from "@/composables/getDocument";
+import {mapState, useStore} from 'vuex'
+import {computed} from 'vue'
 export default {
   props: ["id"],
   setup(props) {
-    const { error, document: playlist } = getDocument("playlists", props.id);
-    return { error, playlist };
+    const store = useStore();
+    store.state.collection = 'playlists'
+    const run = store.commit('getDocument',props.id)
+    return {store}
   },
 };
 </script>
