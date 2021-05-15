@@ -1,14 +1,16 @@
 <template>
-  <div class="error" v-if="store.state.error">{{ store.state.error }}</div>
-  <div v-if="store.state.document" class="playlist-details">
+  <div class="error" v-if="state.user.error">
+    {{ state.user.error }}
+  </div>
+  <div v-if="state.user.document" class="playlist-details">
     <!-- playlist information -->
     <div class="playlist-info">
       <div class="cover">
-        <img :src="store.state.document.coverUrl" />
+        <img :src="state.user.document.coverUrl" />
       </div>
-      <h2>{{ store.state.document.title }}</h2>
-      <p class="username">Created by {{ store.state.document.userName }}</p>
-      <p class="description">{{ store.state.document.description }}</p>
+      <h2>{{ state.user.document.title }}</h2>
+      <p class="username">Created by {{ state.user.document.userName }}</p>
+      <p class="description">{{ state.user.document.description }}</p>
     </div>
 
     <!-- song list -->
@@ -19,16 +21,17 @@
 </template>
 
 <script>
-import {  useStore } from "vuex";
+import { useStore } from "vuex";
 export default {
   props: ["id"],
   setup(props) {
     const store = useStore();
-    const run = store.commit("getDocument", {
-      collection: store.state.collection,
+    const { state } = useStore();
+    store.commit("user/getDocument", {
+      collection: state.user.collection,
       id: props.id,
     });
-    return { store };
+    return { state };
   },
 };
 </script>

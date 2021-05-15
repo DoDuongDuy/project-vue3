@@ -1,8 +1,8 @@
 <template>
   <div class="home">
-    <div v-if="$store.state.error" class="error">{{ error }}</div>
+    <div v-if="$store.state.auth.error" class="error">{{ $store.state.auth.error }}</div>
     <div>
-         <ListView :playlists="$store.state.documents"/>
+         <ListView :playlists="$store.state.user.documents"/>
     </div>
   </div>
 </template>
@@ -15,7 +15,7 @@ export default {
   components:{ListView},
   setup(props) {
     const store = useStore();
-    store.commit('getCollection', store.state.collection)
+    store.commit('user/getCollection', store.state.user.collection)
   }
 };
 </script>

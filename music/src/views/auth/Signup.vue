@@ -1,53 +1,50 @@
 <template>
   <form @submit.prevent="handleSubmit">
     <h3 style="text-align: center">Sign up</h3>
-    <input type="text" placeholder="displayName" v-model="$store.state.displayName" />
-    <input type="text" placeholder="email" v-model="$store.state.email" />
     <input
+      type="text"
+      required
+      placeholder="displayName"
+      v-model="state.auth.displayName"
+    />
+    <input
+      type="text"
+      required
+      placeholder="email"
+      v-model="state.auth.email"
+    />
+    <input
+      required
       type="password"
       placeholder="password"
-      v-model="$store.state.password"
+      v-model="state.auth.password"
     />
-    <div v-if="$store.state.error" class="error">{{ error }}</div>
-    <button v-if="!$store.state.isPending">Sign up</button>
-    <button v-if="$store.state.isPending" disabled>Loading...</button>
+    <div v-if="state.auth.error" class="error">
+      {{ state.auth.error }}
+    </div>
+    <button v-if="!state.auth.isPending">Sign up</button>
+    <button v-if="state.auth.isPending" disabled>Loading...</button>
   </form>
 </template>
 
 <script>
-import { ref } from "@vue/reactivity";
 import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 export default {
-  // setup(props) {
-  //   const displayName = ref("");
-  //   const email = ref("");
-  //   const password = ref("");
-  //   const { error, signup, isPending } = useSignup();
-  //   const handleSubmit = async () => {
-  //     const res = await signup(email.value, password.value, displayName.value);
-  //     if(!error.value){
-  //         console.log("user signed up!!!");
-  //     }
-  //   };
-
-  //   return { displayName, email, password, isPending, error, handleSubmit };
-  // },
   setup(prop, context) {
+    const router = useRouter();
     const store = useStore();
-    const displayName = ref("");
+    const { state } = useStore();
     const handleSubmit = async () => {
-      await store.dispatch("signup", {
-        email: store.state.email,
-        password: store.state.password,
-        displayName: store.state.displayName,
-      });
-      if (!store.state.error) {
-        alert('signup completed')
+      await store.dispatch("auth/signup", state.auth.displayName);
+      if (!state.auth.error) {
+        alert("signup completed");
+        router.push({ name: "Login" });
         context.emit("signup");
       }
     };
 
-    return {  handleSubmit };
+    return { handleSubmit, state };
   },
 };
 </script>

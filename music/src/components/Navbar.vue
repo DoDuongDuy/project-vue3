@@ -8,7 +8,7 @@
         </div>
       </h1>
       <div class="links">
-        <div v-if="$store.state.user">
+        <div v-if="$store.state.user.user">
           <router-link :to="{ name: 'CreatePlaylist' }">
             Create Playlist</router-link
           >
@@ -32,9 +32,9 @@ export default {
   setup(props) {
     const store= useStore();
     const router = useRouter();
-    store.getters.getUser;
+    store.getters['user/getUser'];
     const handleClick = async () => {
-      await store.dispatch('logout')
+      await store.dispatch('auth/logout')
       console.log("user loged out!!");
       router.push({ name: "Login" });
     };

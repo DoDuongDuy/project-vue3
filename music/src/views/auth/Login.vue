@@ -1,15 +1,15 @@
 <template>
   <form @submit.prevent="handleSubmit">
     <h3 style="text-align: center">Login</h3>
-    <input type="email" placeholder="email" v-model="store.state.email" />
+    <input type="email" placeholder="email" v-model="$store.state.auth.email" />
     <input
       type="password"
       placeholder="password"
-      v-model="store.state.password"
+      v-model="store.state.auth.password"
     />
-    <div v-if="error" class="error">{{ error }}</div>
-    <button v-if="!store.state.isPending">Login</button>
-    <button v-if="store.state.isPending" disabled>Loading...</button>
+    <div v-if="$store.state.auth.error" class="error">{{ $store.state.auth.error }}</div>
+    <button v-if="!$store.state.auth.isPending">Login</button>
+    <button v-if="$store.state.auth.isPending" disabled>Loading...</button>
     <!-- <button>Login</button> -->
   </form>
 </template>
@@ -19,36 +19,19 @@ import { ref, computed } from "@vue/reactivity";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 export default {
-  // setup(props) {
-  //   const { login, error, isPending } = useLogin();
-  //   const email = ref("");
-  //   const password = ref("");
-  //   const handleSubmit = async () => {
-  //     const res = await login(email.value, password.value);
-  //     if (!error.value) {
-  //       console.log(email.value, password.value);
-  //       console.log("user loged in!!");
-  //     }
-  //   };
-  //   return { email, password, handleSubmit, error, isPending };
-  // },
   setup(props, context) {
     const store = useStore();
     const router = useRouter();
-    const error = computed(() => store.state.error);
+    console.log(store);
+    // const error = computed(() => store.state.auth.error);
     const handleSubmit = async () => {
-      await store.dispatch("login", {
-        email: store.state.email,
-        password: store.state.password,
-      });
-      console.log(context);
-      if (!store.state.error) {
-        console.log("user logged in");
-        // context.emit("login")
+      await store.dispatch("auth/login");
+      if (!store.state.auth.error) {
+        context.emit("login")
         router.push({ name: "Home" });
       }
     };
-    return { handleSubmit, error, store };
+    return { handleSubmit, store };
   },
 };
 </script>
