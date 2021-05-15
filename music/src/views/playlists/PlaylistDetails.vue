@@ -19,15 +19,16 @@
 </template>
 
 <script>
-import {mapState, useStore} from 'vuex'
-import {computed} from 'vue'
+import {  useStore } from "vuex";
 export default {
   props: ["id"],
   setup(props) {
     const store = useStore();
-    store.state.collection = 'playlists'
-    const run = store.commit('getDocument',props.id)
-    return {store}
+    const run = store.commit("getDocument", {
+      collection: store.state.collection,
+      id: props.id,
+    });
+    return { store };
   },
 };
 </script>

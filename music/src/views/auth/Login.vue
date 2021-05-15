@@ -2,7 +2,11 @@
   <form @submit.prevent="handleSubmit">
     <h3 style="text-align: center">Login</h3>
     <input type="email" placeholder="email" v-model="store.state.email" />
-    <input type="password" placeholder="password" v-model="store.state.password" />
+    <input
+      type="password"
+      placeholder="password"
+      v-model="store.state.password"
+    />
     <div v-if="error" class="error">{{ error }}</div>
     <button v-if="!store.state.isPending">Login</button>
     <button v-if="store.state.isPending" disabled>Loading...</button>
@@ -11,9 +15,9 @@
 </template>
 
 <script>
-import { ref , computed} from "@vue/reactivity";
-import { useStore } from 'vuex';
-import useLogin from "../../composables/useLogin.js";
+import { ref, computed } from "@vue/reactivity";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 export default {
   // setup(props) {
   //   const { login, error, isPending } = useLogin();
@@ -30,17 +34,21 @@ export default {
   // },
   setup(props, context) {
     const store = useStore();
-    const error = computed(()=> store.state.error);
+    const router = useRouter();
+    const error = computed(() => store.state.error);
     const handleSubmit = async () => {
-      await store.dispatch("login");
+      await store.dispatch("login", {
+        email: store.state.email,
+        password: store.state.password,
+      });
       console.log(context);
-      if(!store.state.error) {
+      if (!store.state.error) {
         console.log("user logged in");
-        context.emit("login")
+        // context.emit("login")
+        router.push({ name: "Home" });
       }
     };
-
-    return { handleSubmit , error, store};
+    return { handleSubmit, error, store };
   },
 };
 </script>

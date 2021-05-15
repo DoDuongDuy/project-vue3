@@ -8,7 +8,7 @@
         </div>
       </h1>
       <div class="links">
-        <div v-if="user">
+        <div v-if="$store.state.user">
           <router-link :to="{ name: 'CreatePlaylist' }">
             Create Playlist</router-link
           >
@@ -26,20 +26,19 @@
 </template>
 
 <script>
-import Logout from "../composables/useLogout.js";
-import getUser from "../composables/getUser.js";
+import {useStore} from "vuex"
 import { useRouter } from "vue-router";
 export default {
   setup(props) {
-    const { logout, error } = Logout();
-    const { user } = getUser();
+    const store= useStore();
     const router = useRouter();
+    store.getters.getUser;
     const handleClick = async () => {
-      await logout();
+      await store.dispatch('logout')
       console.log("user loged out!!");
       router.push({ name: "Login" });
     };
-    return { logout, handleClick, user };
+    return { handleClick };
   },
 };
 </script>
