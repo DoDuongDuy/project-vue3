@@ -1,7 +1,6 @@
 <template>
-  <h1>im here</h1>
   <div v-for="playlist in playlists" :key="playlist.id">
-    <router-link :to="{name: 'PlaylistDetails', params: {id: playlist.id}}">
+    <router-link :to="{ name: 'PlaylistDetails', params: { id: playlist.id } }">
       <div class="single">
         <div class="thumbnail">
           <img :src="playlist.coverUrl" alt="" />
@@ -19,8 +18,12 @@
 </template>
 
 <script>
+import {useStore} from "vuex"
 export default {
   props: ["playlists"],
+  setup(props) {
+    const store = useStore();
+  },
 };
 </script>
 

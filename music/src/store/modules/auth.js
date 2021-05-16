@@ -11,6 +11,15 @@ const auth = {
       error: ref(null),
       isPending: ref(false),
       //user
+      user: ref(projectAuth.currentUser),
+    },
+    getters:{
+      //getUser
+      getUser(state) {
+        projectAuth.onAuthStateChanged(_user => {
+          state.user = _user
+        });
+      }
     },
     actions: {
       //login
