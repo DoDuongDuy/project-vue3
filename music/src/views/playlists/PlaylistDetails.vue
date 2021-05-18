@@ -34,7 +34,7 @@
   </div>
   <div v-if="tabIdx == 2">
     <label>are you sure?</label>
-    <button @click="handleDelete">Yes</button>
+    <button style="margin-left:30px" @click="handleDelete">Yes</button>
     <button @click="tabIdx = 1">No</button>
   </div>
 </template>

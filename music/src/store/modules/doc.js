@@ -26,14 +26,14 @@ const doc = {
       const unsub = collectionRef.onSnapshot(snap => {
         let results = []
         snap.docs.forEach(doc => {
-          // must wait for the server to create the timestamp & send it back
           doc.data().createdAt && results.push({ ...doc.data(), id: doc.id })
         });
         // update values
         state.documents = results
+        // console.log(results);
         state.error = null
       }, err => {
-        console.log(err.message)
+        // console.log(err.message)
         state.documents = null
         state.error = 'could not fetch the data'
       })
@@ -67,19 +67,6 @@ const doc = {
     }
   },
   actions: {
-    //add docmument
-    async addDoc(){
-      // try {
-      //   const res =  await projectFirestore.collection(collection).add(doc)
-      //   isPending.value = false;
-      //   return res
-      // }
-      // catch (err) {
-      //   console.log(err.message);
-      //   isPending.value = false;
-      //   error.value = 'could not send the message';
-      // }
-    }, 
     //delete document 
     async deleteDoc(state, { collection, id }) {
       let docRef = projectFirestore.collection(collection).doc(id)
@@ -111,9 +98,7 @@ const doc = {
     //update documents
     async updateDoc(state, updates) {
       state.error = null
-      console.log(updates[1].id);
       let docRef = projectFirestore.collection("playlists").doc(updates[1].id)
-      console.log(updates);
       try {
         const res = await docRef.update(updates[0])
         // isPending.value = false

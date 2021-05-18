@@ -7,7 +7,7 @@
         </div>
         <div class="info">
           <h3>{{ playlist.title }}</h3>
-          <p>Create by {{ playlist.name }}</p>
+          <p>Create by {{ playlist.userName }}</p>
         </div>
         <div class="song-number">
           <p>{{ playlist.songs.length }}</p>
@@ -23,6 +23,7 @@ export default {
   props: ["playlists"],
   setup(props) {
     const store = useStore();
+    console.log(props.playlists);
   },
 };
 </script>

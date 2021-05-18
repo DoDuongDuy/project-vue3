@@ -9,13 +9,16 @@
           <router-link :to="{ name: 'Home' }">Music</router-link>
         </div>
       </h1>
+
       <div class="links">
         <div v-if="$store.state.auth.user">
+          <span>Hi, {{ $store.state.auth.user.displayName }}</span>
           <router-link :to="{ name: 'CreatePlaylist' }">
             <button>Create Playlist</button></router-link
           >
+
           <router-link :to="{ name: 'UserPlaylists' }">
-            <button>MY Playlistst</button></router-link
+            <button>My Playlistst</button></router-link
           >
           <button @click="handleClick">logout</button>
         </div>
@@ -40,7 +43,6 @@ export default {
     store.getters["auth/getUser"];
     const handleClick = async () => {
       await store.dispatch("auth/logout");
-      console.log("user loged out!!");
       router.push({ name: "Login" });
     };
     return { handleClick };
