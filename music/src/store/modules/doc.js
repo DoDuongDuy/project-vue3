@@ -1,5 +1,5 @@
 import { ref, watchEffect } from 'vue'
-import { projectAuth, projectFirestore ,projectStorage} from "../../firebase/config.js"
+import { projectFirestore, projectStorage } from "../../firebase/config.js"
 
 const doc = {
   namespaced: true,
@@ -9,17 +9,20 @@ const doc = {
     //getCollection
     documents: ref(null),
     document: ref(null),
-    collection: ref('playlists')
+    collection: ref('playlists'),
     //create playlists
   },
   getters: {
   },
   mutations: {
     //get Collection
-    getCollection(state, collection) {
-      let collectionRef = projectFirestore.collection(collection)
+    getCollection(state, query ) {
+      let collectionRef = projectFirestore.collection(state.collection)
         .orderBy('createdAt')
-
+      if (query) {
+        console.log(query);
+        collectionRef = collectionRef.where(...query)
+      }
       const unsub = collectionRef.onSnapshot(snap => {
         let results = []
         snap.docs.forEach(doc => {
@@ -38,6 +41,7 @@ const doc = {
       watchEffect((onInvalidate) => {
         onInvalidate(() => unsub());
       });
+      return state.documents
     },
     //get documents 
     getDocument(state, { collection, id }) {
@@ -63,15 +67,28 @@ const doc = {
     }
   },
   actions: {
+    //add docmument
+    async addDoc(){
+      // try {
+      //   const res =  await projectFirestore.collection(collection).add(doc)
+      //   isPending.value = false;
+      //   return res
+      // }
+      // catch (err) {
+      //   console.log(err.message);
+      //   isPending.value = false;
+      //   error.value = 'could not send the message';
+      // }
+    }, 
     //delete document 
-    async deleteDoc(state,{collection, id}) {
+    async deleteDoc(state, { collection, id }) {
       let docRef = projectFirestore.collection(collection).doc(id)
       state.isPending = true
       state.error = null
 
       try {
         const res = await docRef.delete()
-        state.isPending= false
+        state.isPending = false
         return res
       }
       catch (err) {
@@ -81,7 +98,7 @@ const doc = {
       }
     },
     //delete image
-    async deleteImg(state, path){
+    async deleteImg(state, path) {
       state.error = null;
       const storageRef = projectStorage.ref(path);
       try {
@@ -89,6 +106,23 @@ const doc = {
       } catch (err) {
         console.log(err.message)
         state.error = err.message
+      }
+    },
+    //update documents
+    async updateDoc(state, updates) {
+      state.error = null
+      console.log(updates[1].id);
+      let docRef = projectFirestore.collection("playlists").doc(updates[1].id)
+      console.log(updates);
+      try {
+        const res = await docRef.update(updates[0])
+        // isPending.value = false
+        return res
+      }
+      catch (err) {
+        console.log(err.message)
+        // isPending.value = false
+        state.error = 'could not update the document'
       }
     }
   }

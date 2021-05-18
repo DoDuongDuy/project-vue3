@@ -17,7 +17,7 @@ export default {
   setup(props) {
     const store = useStore();
     watchEffect(()=>{
-      store.commit('doc/getCollection', store.state.doc.collection)
+      store.commit('doc/getCollection')
     })
     // console.log(store.state.doc.documents);
 

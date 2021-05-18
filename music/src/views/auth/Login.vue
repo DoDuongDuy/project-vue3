@@ -28,7 +28,7 @@ export default {
       await store.dispatch("auth/login");
       if (!store.state.auth.error) {
         context.emit("login")
-        router.push({ name: "Home" });
+        router.push({ name: "UserPlaylists" });
       }
     };
     return { handleSubmit, store };

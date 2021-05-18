@@ -27,9 +27,9 @@
           <h3>{{ song.title }}</h3>
           <p>{{ song.artist }}</p>
         </div>
-        <button v-if="ownership">delete</button>
+        <button v-if="ownership" @click="handleClick(song.id)">delete</button>
       </div>
-      <AddSong :playlist="state.doc.document" />
+      <AddSong v-if="ownership" :playlist="state.doc.document" :id="idplaylists"/>
     </div>
   </div>
   <div v-if="tabIdx == 2">
@@ -52,6 +52,7 @@ export default {
     const { state } = useStore();
     const router = useRouter();
     const tabIdx = ref(1);
+    const idplaylists = props.id;
     store.commit("doc/getDocument", {
       collection: state.doc.collection,
       id: props.id,
@@ -71,7 +72,14 @@ export default {
       });
       await store.dispatch("doc/deleteImg", state.doc.document.filePath);
     };
-    return { state, ownership, handleDelete, tabIdx };
+    const handleClick = async (id) => {
+      const songs = state.doc.document.songs.filter((song) => {
+        return song.id != id;
+      });
+      await store.dispatch("doc/updateDoc",[{songs:songs}, {id:props.id}]);
+    };
+
+    return { state, ownership, handleDelete, tabIdx, handleClick , idplaylists};
   },
 };
 </script>
