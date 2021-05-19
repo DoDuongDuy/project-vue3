@@ -1,5 +1,5 @@
 import { createStore } from "vuex";
-
+import items from "../data/items"
 function updateLocalStorage(cart) {
   localStorage.setItem("cart", JSON.stringify(cart));
 }
@@ -7,6 +7,7 @@ function updateLocalStorage(cart) {
 export default createStore({
   state: {
     cart: [],
+    items: items
   },
   getters: {
     productQuantity: (state) => (product) => {
@@ -51,6 +52,8 @@ export default createStore({
       }
     }
   },
-  actions: {},
+  actions: {
+
+  },
   modules: {},
 });

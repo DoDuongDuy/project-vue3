@@ -19,30 +19,27 @@
 
 <script>
 // @ is an alias to /src
-import items from "../data/items.js";
+// import items from "../data/items.js";
 import ProductSummaryCard from "../components/products/ProductSummaryCard.vue";
 import ProductDescriptionDrawer from "../components/products/ProductDescriptionDrawer.vue";
+import { useStore } from "vuex";
+import { reactive, ref } from "@vue/reactivity";
 export default {
   name: "Home",
   components: { ProductSummaryCard, ProductDescriptionDrawer },
-  data() {
-    return {
-      items: items,
-      product: null,
-      active: {
-        product_drawer: false,
-      },
+  setup() {
+    const store = useStore();
+    const items = store.state.items;
+    const product = ref(null);
+    const active = reactive({ product_drawer: false });
+    const ViewProduct = (item) => {
+      product.value = item;
+      active.product_drawer = true;
     };
-  },
-  methods: {
-    ViewProduct(product) {
-      this.product = product;
-      this.active.product_drawer = true;
-      // console.log(this.product);
-    },
-    closeProductDrawer() {
-      this.active.product_drawer = false;
-    },
+    const closeProductDrawer = () => {
+      active.product_drawer = false;
+    };
+    return { items, product, active, ViewProduct, closeProductDrawer };
   },
 };
 </script>

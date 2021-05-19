@@ -6,34 +6,28 @@
       placeholder="display name"
       v-model="displayName"
     />
-    <input type="email" required placeholder="email" v-model="email" />
-    <input type="password" required placeholder="password" v-model="password" />
-    <div class="error">{{ error }}</div>
+    <input type="email" required placeholder="email" v-model="$store.state.email" />
+    <input type="password" required placeholder="password" v-model="$store.state.password" />
+    <div class="error">{{ $store.state.error }}</div>
     <button>Sign up</button>
   </form>
 </template>
 
 <script>
+import { useStore } from 'vuex';
 import { ref } from "@vue/reactivity";
-import useSignup from "../composables/useSignup.js";
 export default {
   setup(prop, context) {
-    const { error, signup } = useSignup();
-    //ref
+    const store = useStore()
     const displayName = ref("");
-    const email = ref("");
-    const password = ref("");
     const handleSubmit = async () => {
-      // console.log(displayName.value, email.value, password.value);
-      await signup(email.value, password.value, displayName.value);
-      // console.log("user signed up")
-      if (!error.value) {
-        // console.log("user singed in");
+      await store.dispatch('signup',displayName.value);
+      if (!store.state.error) {
         context.emit("signup");
       }
     };
 
-    return { displayName, email, password, handleSubmit, error };
+    return { displayName, handleSubmit };
   },
 };
 </script>
