@@ -30,4 +30,6 @@ export default {
   .btn {
     margin-top: 20px;
   }
+
+  
 </style>
